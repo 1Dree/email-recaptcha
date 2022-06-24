@@ -1,0 +1,39 @@
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 5%;
+  width: 100%;
+  max-width: 300px;
+}
+
+form input,
+form button {
+  margin-top: 20px;
+  padding: 15px 20px;
+  border-radius: 5px;
+  outline: 0;
+  width: 100%;
+}
+
+form input {
+  border: 1px solid #ccc;
+}
+
+form button {
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  border: 0;
+  background-color: rgb(84, 255, 84);
+}
+
+form button:active {
+  transform: scale(0.9);
+}
+
+.g-recaptcha {
+  margin-top: 20px;
+}

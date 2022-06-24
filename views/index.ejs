@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <title>reCAPTCHA demo: Simple page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link href="/css/general.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/css/index.css" type="text/css" />
+  </head>
+  <body>
+    <form action="#" method="post">
+      <h2>Faça o login!</h2>
+
+      <input id="name" type="text" placeholder="primeiro nome" required />
+
+      <input id="email" type="email" placeholder="email" required />
+
+      <div
+        id="my-recaptcha"
+        class="g-recaptcha"
+        data-sitekey="<%= sitekey %>"
+      ></div>
+
+      <button id="submit" type="submit">Enviar</button>
+    </form>
+  </body>
+
+  <script>
+    const form = document.querySelector("form");
+    const gRecaptchaEl = document.querySelector("#my-recaptcha");
+
+    gRecaptchaEl.setAttribute(
+      "data-size",
+      window.innerWidth <= 350 ? "compact" : "normal"
+    );
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+
+      const button = document.querySelector("#submit");
+      const userToken = grecaptcha.getResponse();
+      const name = document.querySelector("#name").value;
+      const email = document.querySelector("#email").value;
+
+      button.disabled = true;
+      button.style.backgroundColor = "rgb(128, 255, 128)";
+      button.style.pointerEvents = "none";
+      button.textContent = "...loading";
+
+      fetch("http://localhost:3000/recaptcha-verification", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          login: {
+            name,
+            email,
+            listIds: [2],
+          },
+          userToken,
+        }),
+      })
+        .then(res => res.json())
+        .then(msg => {
+          switch (msg) {
+            case "recaptcha failed":
+              form.append(
+                "Você não passou no teste reCAPTCHA. Tente novamente mais tarde."
+              );
+              break;
+            case "success":
+              window.location.href = "http://localhost:3000/abrir-email";
+              break;
+
+            case "error has occured":
+              alert(msg);
+              break;
+
+            default:
+              alert("Unknown error has occured.");
+          }
+        })
+        .catch(console.log);
+    });
+  </script>
+</html>
