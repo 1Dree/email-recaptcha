@@ -46,7 +46,7 @@
       button.style.pointerEvents = "none";
       button.textContent = "...loading";
 
-      fetch("http://localhost:3000/recaptcha-verification", {
+      fetch("https://email-recaptcha.herokuapp.com//recaptcha-verification", {
         method: "post",
         headers: {
           "Content-Type": "application/json",
