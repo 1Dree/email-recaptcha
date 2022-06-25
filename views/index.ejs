@@ -35,9 +35,13 @@
 
     form.addEventListener("submit", e => {
       e.preventDefault();
+      const userToken = grecaptcha.getResponse();
+
+      if (!userToken) {
+        return;
+      }
 
       const button = document.querySelector("#submit");
-      const userToken = grecaptcha.getResponse();
       const name = document.querySelector("#name").value;
       const email = document.querySelector("#email").value;
 
